@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import LoginUI from './login/login';
 
 import AuthService from '../services/AuthService';
+import Profile from './profile/profile';
 
 export default function Home() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -38,6 +39,7 @@ export default function Home() {
       <Routes>
         <Route path="/">
           <Route path="/login" element={<LoginUI />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
           <Route
             path="*"
             element={

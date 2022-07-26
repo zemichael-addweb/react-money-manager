@@ -1,16 +1,16 @@
-import { ICachedJWT, JWTAction } from "../interface/authTypes"
+import { ICachedJWT, ICachedJWTEmpty, JWTAction } from "../interface/authTypes"
 import * as actionTypes from "./actionTypes"
 
-const initialState: ICachedJWT = {}
+const initialState: ICachedJWT | ICachedJWTEmpty = {}
 
 const reducer = (
-    state: ICachedJWT = initialState,
+    state: ICachedJWT | ICachedJWTEmpty = initialState,
     action: JWTAction
-): ICachedJWT => {
+): ICachedJWT | ICachedJWTEmpty => {
     switch (action.type) {
         case actionTypes.SAVE_JWT:
             //save the JWT from session storage
-            const savedJWT: ICachedJWT = {
+            const savedJWT: ICachedJWT | ICachedJWTEmpty = {
             }
             return savedJWT
         case actionTypes.REMOVE_JWT:

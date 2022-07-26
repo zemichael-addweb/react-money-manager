@@ -6,6 +6,7 @@ export interface ICachedJWT {
     expiresAt: string
     refreshAt: string
 }
+export interface ICachedJWTEmpty { }
 
 export type JWTAction = {
     type: string
