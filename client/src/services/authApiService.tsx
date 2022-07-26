@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
-const API_URL = 'https://localhost:4001/';
-const LOGIN_URL = API_URL + '/users/login';
+const API_URL = 'http://localhost:4001/';
+const LOGIN_URL = API_URL + 'api/auth/login';
 const REFRESH_URL = API_URL + '/users/refreshToken';
-const REGISTER_URL = API_URL + '/signup';
-const COMPANIES_GET_ALL = API_URL + '/companies';
+const REGISTER_URL = API_URL + 'api/auth/register';
+
 const BearerHeader = (token: string) => {
   let config = {
     headers: {
@@ -21,15 +21,18 @@ export async function Login(username: string, password: string) {
     password: password,
     email: username,
   };
-  return await axios.post(LOGIN_URL, bodyData).then((response: Response) => {
-    return response;
-  });
+
+  return await axios
+    .post(LOGIN_URL, bodyData)
+    .then((response: AxiosResponse<any, any>) => {
+      return response;
+    });
 }
 
 export async function refreshToken(token: string) {
   return await axios
     .post(REFRESH_URL, BearerHeader(token))
-    .then((response: Response) => {
+    .then((response: AxiosResponse<any, any>) => {
       return response;
     });
 }
@@ -44,10 +47,4 @@ export async function register(
     email,
     password,
   });
-}
-
-export async function getAllCompanies(token) {
-  const data = await axios.get(COMPANIES_GET_ALL, BearerHeader(token));
-  console.log(data);
-  return data;
 }

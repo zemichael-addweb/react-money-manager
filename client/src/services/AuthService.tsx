@@ -1,33 +1,35 @@
-import { refreshToken } from './ApiService';
-import jwt_decode from 'jwt-decode';
+import { refreshToken } from './authApiService';
+import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { Navigate } from 'react-router';
 
-export class AuthService {
+import { iAuthService } from '../interface/authService';
+
+export class AuthService implements iAuthService {
+  saveAccessTokenAsCachedJwtt(response: any) {}
   //store Token
   saveAccessTokenAsCachedJwt(response: any) {
-    if (response.data.sign_in.token) {
+    if (response.data.token) {
+      console.log('saving access token..');
       this.destroyCachedJwt();
       const expiresAt = new Date(
-        jwt_decode(response.data.sign_in.token).exp * 1000
+        jwtDecode<JwtPayload>(response.data.token).exp! * 1000
       );
       //const expiresAt = new Date(Date.now() + expiresIn);
       const refreshAt = new Date(
         // Upon user's activity, refresh 5 minutes before token actually expires.
         // User inactivity till the access token expires will force re-authentication
-        Date.now() + expiresAt - 5 * 60
+        Date.now().valueOf() + expiresAt.valueOf() - 5 * 60
       );
 
       const jwt = {
-        accessToken: response.data.sign_in.token,
-        roleId: response.data.user.role_id,
-        roleName: response.data.user.role.role_name,
-        fullName: response.data.user.full_name,
-        userId: response.data.user.id,
-        companyId: response.data.user.company_id,
-        refreshToken: response.data.sign_in.refresh_token,
+        accessToken: response.data.token,
+        fullName: response.data.user.name,
+        userId: response.data.user._id,
+        refreshToken: response.data.refreshToken,
         expiresAt,
         refreshAt,
       };
+      console.log('jwtData', jwt);
       this.saveCachedJwt(jwt);
       return jwt;
     } else {
@@ -36,12 +38,12 @@ export class AuthService {
   }
 
   refreshToken() {
-    let jwt = AuthService.getCachedJwt();
+    let jwt = this.getCachedJwt();
     let refreshTokenToken = jwt.refreshToken;
-    AuthService.destroyCachedJwt();
+    this.destroyCachedJwt();
     try {
       jwt.accessToken = refreshToken(refreshTokenToken);
-      AuthService.saveCachedJwt(jwt);
+      this.saveCachedJwt(jwt);
       return jwt;
     } catch (error) {
       console.log(error);
@@ -77,14 +79,14 @@ export class AuthService {
   }
 
   getCachedJwt() {
-    return JSON.parse(sessionStorage.getItem('cachedJwt'));
+    return JSON.parse(sessionStorage.getItem('cachedJwt') || '{}');
   }
 
   getCachedJwtToken() {
     return this.getCachedJwt().accessToken;
   }
 
-  saveCachedJwt(jwt) {
+  saveCachedJwt(jwt: Object) {
     sessionStorage.setItem('cachedJwt', JSON.stringify(jwt));
   }
 
