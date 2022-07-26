@@ -1,24 +1,24 @@
-import { ICachedJWT, JWTAction } from "../interface/authtypes"
+import { DispatchType, ICachedJWT, JWTAction } from "../interface/authTypes"
 import * as actionTypes from "./actionTypes"
 
 export function saveArticle(article: ICachedJWT) {
     const action: JWTAction = {
-        type: actionTypes.ADD_ARTICLE,
+        type: actionTypes.SAVE_JWT,
         article,
     }
 
     return simulateHttpRequest(action)
 }
 
-export function removeArticle(article: IArticle) {
-    const action: ArticleAction = {
-        type: actionTypes.REMOVE_ARTICLE,
+export function removeArticle(article: ICachedJWT) {
+    const action: JWTAction = {
+        type: actionTypes.REMOVE_JWT,
         article,
     }
     return simulateHttpRequest(action)
 }
 
-export function simulateHttpRequest(action: ArticleAction) {
+export function simulateHttpRequest(action: JWTAction) {
     return (dispatch: DispatchType) => {
         setTimeout(() => {
             dispatch(action)
