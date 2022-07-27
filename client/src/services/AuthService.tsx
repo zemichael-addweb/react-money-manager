@@ -54,24 +54,17 @@ export class AuthService implements iAuthService {
   //check the status of the token
   checkCachedJwtStatus = () => {
     let cachedJwt = this.getCachedJwt();
-    if (cachedJwt) {
-      if (cachedJwt.refreshAt > new Date().toISOString()) return 'OKAY';
-      else if (cachedJwt.expiresAt <= new Date().toISOString())
+    console.log('cachedJwt', cachedJwt);
+    console.log('true?', Object.keys(cachedJwt).length === 0);
+    if (Object.keys(cachedJwt).length != 0) {
+      if (cachedJwt.refreshAt > new Date().toISOString()) {
+        return 'OKAY';
+      } else if (cachedJwt.expiresAt <= new Date().toISOString()) {
         return 'EXPIRED';
-      else return 'REFRESH';
-    } else return 'NOTOKEN';
-  };
-
-  checkCachedJwtRole = () => {
-    let cachedJwt = this.getCachedJwt();
-    if (cachedJwt) {
-      if (cachedJwt.roleId === 1) return 'admin';
-      else if (cachedJwt.roleId === 2) return 'companyAdmin';
-      else if (cachedJwt.roleId === 3) return 'clerk';
-      //if the role is 1 Admin return Admin
-      //is the role is
-      else return 'unknown';
-    } else return 'unknown';
+      } else {
+        return 'NEED_REFRESH';
+      }
+    } else return 'NO_TOKEN';
   };
 
   getRefreshToken() {

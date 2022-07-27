@@ -8,7 +8,7 @@ import {
   Divider,
 } from '@mui/material';
 import AuthService from '../../services/AuthService';
-import { login } from '../../services/authApiService';
+import { register } from '../../services/authApiService';
 import { useNavigate } from 'react-router';
 import { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
@@ -30,12 +30,14 @@ const ErrorUi: React.FC<any> = (errors: any): ReactElement => {
   } else return <></>;
 };
 
-export default function LoginUI(props: any) {
+export default function Register(props: any) {
   const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
   //states for username and password
   const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [JwtStatus, setJwtStatus] = useState('');
   const [errors, setErrors] = useState([]);
 
@@ -44,16 +46,15 @@ export default function LoginUI(props: any) {
   }, []);
 
   //functions to handle login form
-  async function handleLogin(e: any) {
+  async function handleRegister(e: any) {
     //send username and password to login method
     e.preventDefault();
     try {
-      let response: any = await login(email, password);
-      console.log('response', response.data.token);
-      if (response.data.token) {
+      let response: any = await register(name, email, password, repeatPassword);
+      console.log('response', response);
+      if (response.data._id) {
         console.log('successfully logged in!');
-        AuthService.saveAccessTokenAsCachedJwt(response);
-        navigate('/profile');
+        navigate('/login');
       }
     } catch (error: any) {
       console.log(error);
@@ -67,7 +68,7 @@ export default function LoginUI(props: any) {
       return null;
     }
   }
-  //make a context to share the page title!
+
   return (
     <Box
       sx={{
@@ -77,7 +78,7 @@ export default function LoginUI(props: any) {
         alignItems: 'center',
       }}
     >
-      <Typography variant="h5">Login</Typography>
+      <Typography variant="h5">Register</Typography>
       <Divider
         sx={{
           width: '80%',
@@ -85,6 +86,13 @@ export default function LoginUI(props: any) {
           backgroundColor: 'gray',
           marginBottom: '2rem',
         }}
+      />
+      <TextField
+        sx={{ marginBottom: '1rem' }}
+        onChange={(e) => setName(e.target.value)}
+        required
+        id="standard-username-input"
+        label="Full Name"
       />
       <TextField
         sx={{ marginBottom: '1rem' }}
@@ -99,7 +107,14 @@ export default function LoginUI(props: any) {
         id="standard-password-input"
         label="Password"
         type="password"
-        autoComplete="current-password"
+        required
+      />
+      <TextField
+        sx={{ marginBottom: '1rem' }}
+        onChange={(e) => setRepeatPassword(e.target.value)}
+        id="standard-password-input"
+        label="Repeat Password"
+        type="password"
         required
       />
       <Box sx={{ display: 'flex', marginBottom: '1rem' }}>
@@ -108,10 +123,10 @@ export default function LoginUI(props: any) {
           variant="contained"
           color="primary"
           onClick={(e) => {
-            handleLogin(e);
+            handleRegister(e);
           }}
         >
-          Login
+          Register
         </Button>
       </Box>
       <Typography>JWT Status - {JwtStatus}</Typography>

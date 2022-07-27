@@ -1,23 +1,38 @@
-import { ICachedJWT, ICachedJWTEmpty, JWTAction } from "../interface/authTypes"
+import { ICachedJWT, ICachedJWTEmpty, IState, JWTAction } from "../interface/authTypes"
 import * as actionTypes from "./actionTypes"
 
-const initialState: ICachedJWT | ICachedJWTEmpty = {}
+import AuthService from "../services/AuthService"
 
-const reducer = (
-    state: ICachedJWT | ICachedJWTEmpty = initialState,
-    action: JWTAction
-): ICachedJWT | ICachedJWTEmpty => {
-    switch (action.type) {
-        case actionTypes.SAVE_JWT:
-            //save the JWT from session storage
-            const savedJWT: ICachedJWT | ICachedJWTEmpty = {
-            }
-            return savedJWT
-        case actionTypes.REMOVE_JWT:
-            //remove jwt form session storage
-            return []
-    }
-    return state
+const initialState: IState = {
+    loggedIn: false,
+    savedJWT: {}
 }
 
-export default reducer
+export const JWTReducer = (
+    state: IState = initialState,
+    action: JWTAction
+): IState => {
+    switch (action.type) {
+        case actionTypes.SAVE_JWT:
+            console.log('saving jwt..')
+            AuthService.saveCachedJwt(state)
+            const savedJWT: ICachedJWT | ICachedJWTEmpty = {}
+            return { loggedIn: true, savedJWT: savedJWT }
+
+        case actionTypes.CHECK_LOGGED_IN:
+            console.log('checking...')
+            const status = AuthService.checkCachedJwtStatus()
+            const cachedJWT = AuthService.getCachedJwt()
+            console.log('JWT Status', status)
+            console.log('JWT', cachedJWT)
+            if (status === 'OKAY' || status === 'NEED_REFRESH') {
+                return { loggedIn: true, savedJWT: cachedJWT }
+            } else return { loggedIn: false, savedJWT: {} }
+
+        case actionTypes.REMOVE_JWT:
+            console.log('logging out...')
+            AuthService.handleLogOut()
+            return { loggedIn: false, savedJWT: {} }
+        default: return state
+    }
+}

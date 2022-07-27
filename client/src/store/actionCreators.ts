@@ -1,27 +1,30 @@
 import { DispatchType, ICachedJWT, JWTAction } from "../interface/authTypes"
 import * as actionTypes from "./actionTypes"
+import { JWTStore } from "./store"
 
-export function saveArticle(article: ICachedJWT) {
+export function saveJWT(JWT: ICachedJWT) {
     const action: JWTAction = {
         type: actionTypes.SAVE_JWT,
-        article,
+        JWT,
     }
-
-    return simulateHttpRequest(action)
+    return dispatcher(action)
 }
 
-export function removeArticle(article: ICachedJWT) {
+export function removeCachedJWT() {
     const action: JWTAction = {
-        type: actionTypes.REMOVE_JWT,
-        article,
+        type: actionTypes.REMOVE_JWT
     }
-    return simulateHttpRequest(action)
+    return dispatcher(action)
 }
 
-export function simulateHttpRequest(action: JWTAction) {
-    return (dispatch: DispatchType) => {
-        setTimeout(() => {
-            dispatch(action)
-        }, 500)
+export function checkCachedJwtStatus() {
+    const action: JWTAction = {
+        type: actionTypes.CHECK_LOGGED_IN
     }
+    return dispatcher(action)
+}
+
+function dispatcher(action: JWTAction) {
+    console.log('Dispatching...')
+    return JWTStore.dispatch(action)
 }
