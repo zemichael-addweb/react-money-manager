@@ -27,5 +27,5 @@ export function checkCachedJwtStatus() {
 //thunk here
 function dispatcher(action: JWTAction) {
     console.log('Dispatching...')
-    return () => { return store.dispatch(action) }
+    return store.dispatch(action)
 }
