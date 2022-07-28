@@ -16,7 +16,7 @@ const BearerHeader = (token: string) => {
 
 //This file is all about api calling functions!
 
-export async function Login(username: string, password: string) {
+export async function login(username: string, password: string) {
   const bodyData = {
     password: password,
     email: username,
@@ -38,13 +38,15 @@ export async function refreshToken(token: string) {
 }
 
 export async function register(
-  username: string,
+  name: string,
   email: string,
-  password: string
+  password: string,
+  passwordConfirmation: string
 ) {
   return axios.post(REGISTER_URL, {
-    username,
+    name,
     email,
     password,
+    passwordConfirmation,
   });
 }

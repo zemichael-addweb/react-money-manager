@@ -1,15 +1,20 @@
 export interface ICachedJWT {
-    accesstoken: string
-    fullName: string
-    userId: string
-    refreshToken: string
-    expiresAt: string
-    refreshAt: string
+    accesstoken: string;
+    fullName: string;
+    userId: string;
+    refreshToken: string;
+    expiresAt: string;
+    refreshAt: string;
 }
+export interface IState {
+    loggedIn: boolean;
+    savedJWT?: ICachedJWT | Object;
+}
+export interface ICachedJWTEmpty { }
 
 export type JWTAction = {
     type: string
-    article: ICachedJWT
+    JWT?: ICachedJWT
 }
 
 export type DispatchType = (args: JWTAction) => JWTAction

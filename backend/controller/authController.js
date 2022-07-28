@@ -32,14 +32,14 @@ const register = async (req, res, next) => {
     }
     // if passwords don't match
     if (password != passwordConfirmation) {
-      return res.status(400).send("Passwords Don't match");
+      return res.status(400).send({ errors: [{ msg: "Passwords Don't match" }] });
     }
 
     // Check if user already exists
     const oldUser = await User.findOne({ $or: [{ 'name': name }, { 'email': email }] });
 
     if (oldUser) {
-      return res.status(409).send("User Already Exists. Please Login");
+      return res.status(400).send({ errors: [{ msg: "User Already Exists. Please Login" }] });
     }
 
     //Encrypt password
@@ -148,9 +148,10 @@ const login = async (req, res, next) => {
       // user
       return res.status(200).send(resUser);
     }
-    return res.status(400).send("Invalid Credentials");
+    return res.status(400).send({ errors: [{ msg: "Invalid Credentials" }] });
   } catch (err) {
     console.log(err);
+    return res.status(500).send({ errors: [{ msg: "Internal Server Error" }] });
   }
 }
 
