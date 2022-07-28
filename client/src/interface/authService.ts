@@ -1,5 +1,5 @@
 export interface iAuthService {
-  saveAccessTokenAsCachedJwt: Function;
+  returnAccessTokenAsCachedJwt: Function;
   refreshToken: Function;
   checkCachedJwtStatus: Function;
   getRefreshToken: Function;

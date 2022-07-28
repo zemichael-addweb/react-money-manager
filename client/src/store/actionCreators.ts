@@ -1,6 +1,6 @@
-import { DispatchType, ICachedJWT, JWTAction } from "../interface/authTypes"
+import { ICachedJWT, JWTAction } from "../interface/authTypes"
 import * as actionTypes from "./actionTypes"
-import { JWTStore } from "./store"
+import { store } from "./store"
 
 export function saveJWT(JWT: ICachedJWT) {
     const action: JWTAction = {
@@ -24,7 +24,8 @@ export function checkCachedJwtStatus() {
     return dispatcher(action)
 }
 
+//thunk here
 function dispatcher(action: JWTAction) {
     console.log('Dispatching...')
-    return JWTStore.dispatch(action)
+    return () => { return store.dispatch(action) }
 }

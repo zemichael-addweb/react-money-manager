@@ -1,27 +1,23 @@
 import './home.sass';
-import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { Box } from '@mui/material';
-import { Link } from 'react-router-dom';
 import LoginUI from './login/login';
 
-import Layout from '../components/layout/layout';
+import Layout from '../layout/layout';
 
-import AuthService from '../services/AuthService';
 import Profile from './profile/profile';
 import Register from './register/register';
-import { JWTStore } from '../store/store';
-
+import { store } from '../store/store';
 import { checkCachedJwtStatus } from '../store/actionCreators';
-import { ICachedJWT, ICachedJWTEmpty, IState } from '../interface/authTypes';
+import { IState } from '../interface/authTypes';
+import { useState } from 'react';
 
 export default function Home() {
+  const [loggedIn, setLoggedIn] = useState(false);
   checkCachedJwtStatus();
-  let JWTData: IState = JWTStore.getState();
+  let JWTData: IState = store.getState();
+
   return (
-    <Layout>
+    <Layout loggedIn={loggedIn}>
       {
         //Routes here
       }

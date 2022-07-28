@@ -3,11 +3,11 @@ import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { Navigate } from 'react-router';
 
 import { iAuthService } from '../interface/authService';
+import { ICachedJWT } from '../interface/authTypes';
 
 export class AuthService implements iAuthService {
-  saveAccessTokenAsCachedJwtt(response: any) {}
   //store Token
-  saveAccessTokenAsCachedJwt(response: any) {
+  returnAccessTokenAsCachedJwt(response: any) {
     if (response.data.token) {
       console.log('saving access token..');
       this.destroyCachedJwt();
@@ -30,7 +30,7 @@ export class AuthService implements iAuthService {
         refreshAt,
       };
       console.log('jwtData', jwt);
-      this.saveCachedJwt(jwt);
+      // this.saveCachedJwt(jwt);
       return jwt;
     } else {
       return response;
@@ -79,7 +79,7 @@ export class AuthService implements iAuthService {
     return this.getCachedJwt().accessToken;
   }
 
-  saveCachedJwt(jwt: Object) {
+  saveCachedJwt(jwt: ICachedJWT) {
     sessionStorage.setItem('cachedJwt', JSON.stringify(jwt));
   }
 

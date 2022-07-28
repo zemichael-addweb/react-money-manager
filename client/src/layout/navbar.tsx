@@ -1,18 +1,21 @@
 import { Button, Container, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { IState } from '../../interface/authTypes';
-import { checkCachedJwtStatus } from '../../store/actionCreators';
-import { JWTStore } from '../../store/store';
+import { IState } from '../interface/authTypes';
+import { checkCachedJwtStatus } from '../store/actionCreators';
+import { store } from '../store/store';
 
 export default function NavBar() {
   const [fullName, setFullName] = useState('');
-  let JWTData: IState = JWTStore.getState();
+
+  useEffect(() => {
+    checkCachedJwtStatus();
+  }, []);
+  let JWTData: IState = store.getState();
   let JWT: any = JWTData.savedJWT ? JWTData.savedJWT : {};
-  const unsubscribe = JWTStore.subscribe(() => {
+  store.subscribe(() => {
     setFullName(JWT.fullName ? `[${JWT.fullName}]` : '');
   });
-
   return (
     <div className="App-header">
       <Container sx={{ margin: 'auto', my: 4 }}>
@@ -24,7 +27,7 @@ export default function NavBar() {
         >
           Welcome {fullName} to Money Manager!
         </Typography>
-        {JWT.fullName ? (
+        {fullName ? (
           ''
         ) : (
           <>

@@ -15,7 +15,8 @@ export const JWTReducer = (
     switch (action.type) {
         case actionTypes.SAVE_JWT:
             console.log('saving jwt..')
-            AuthService.saveCachedJwt(state)
+            let JwtToSave: any = action.JWT
+            AuthService.saveCachedJwt(JwtToSave)
             const savedJWT: ICachedJWT | ICachedJWTEmpty = {}
             return { loggedIn: true, savedJWT: savedJWT }
 

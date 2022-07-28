@@ -1,4 +1,4 @@
-import { Box, Card, Typography, Divider } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import NavBar from './navbar';
 
 export default function Layout(props: any) {

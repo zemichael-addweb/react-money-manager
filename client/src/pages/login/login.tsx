@@ -10,8 +10,8 @@ import {
 import AuthService from '../../services/AuthService';
 import { login } from '../../services/authApiService';
 import { useNavigate } from 'react-router';
-import { Dispatch } from 'redux';
-import { useDispatch } from 'react-redux';
+import { saveJWT } from '../../store/actionCreators';
+import { ICachedJWT } from '../../interface/authTypes';
 
 const ErrorUi: React.FC<any> = (errors: any): ReactElement => {
   console.log('Error For UI', errors);
@@ -31,7 +31,6 @@ const ErrorUi: React.FC<any> = (errors: any): ReactElement => {
 };
 
 export default function LoginUI(props: any) {
-  const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
   //states for username and password
   const [password, setPassword] = useState('');
@@ -52,7 +51,9 @@ export default function LoginUI(props: any) {
       console.log('response', response.data.token);
       if (response.data.token) {
         console.log('successfully logged in!');
-        AuthService.saveAccessTokenAsCachedJwt(response);
+        const JWT: ICachedJWT =
+          AuthService.returnAccessTokenAsCachedJwt(response);
+        saveJWT(JWT);
         navigate('/profile');
       }
     } catch (error: any) {
@@ -67,7 +68,6 @@ export default function LoginUI(props: any) {
       return null;
     }
   }
-  //make a context to share the page title!
   return (
     <Box
       sx={{

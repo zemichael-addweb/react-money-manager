@@ -1,12 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  TextField,
-  Typography,
-  Divider,
-} from '@mui/material';
+import { Box, Button, TextField, Typography, Divider } from '@mui/material';
 import AuthService from '../../services/AuthService';
 import { register } from '../../services/authApiService';
 import { useNavigate } from 'react-router';
@@ -31,7 +24,6 @@ const ErrorUi: React.FC<any> = (errors: any): ReactElement => {
 };
 
 export default function Register(props: any) {
-  const dispatch: Dispatch<any> = useDispatch();
   const navigate = useNavigate();
   //states for username and password
   const [password, setPassword] = useState('');
@@ -53,7 +45,7 @@ export default function Register(props: any) {
       let response: any = await register(name, email, password, repeatPassword);
       console.log('response', response);
       if (response.data._id) {
-        console.log('successfully logged in!');
+        console.log('successfully Registered!');
         navigate('/login');
       }
     } catch (error: any) {

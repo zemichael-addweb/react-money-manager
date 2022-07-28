@@ -4,6 +4,6 @@ import thunk from "redux-thunk"
 import { JWTReducer } from "./reducer"
 import { DispatchType, IState, JWTAction } from "../interface/authTypes"
 
-export const JWTStore: Store<IState, JWTAction> & {
+export const store: Store<IState, JWTAction> & {
     dispatch: DispatchType
 } = createStore(JWTReducer, applyMiddleware(thunk))
