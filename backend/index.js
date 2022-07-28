@@ -16,6 +16,7 @@ const reqres = require('./middleware/reqreslog');
 const cors = require('cors')
 
 const auth = require('./routes/auth');
+const account = require('./routes/account');
 
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
@@ -120,6 +121,7 @@ const specs = swaggerJsDoc(options);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.use('/api/auth', auth);
+app.use('/api/account', account);
 
 
 app.listen(port, () => {

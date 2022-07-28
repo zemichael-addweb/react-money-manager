@@ -4,16 +4,18 @@ const User = require("../model/user");
 const config = process.env;
 
 const isAuthenticated = (req, res, next) => {
-  const token = req.headers["x-access-token"];
-
-  if (!token) {
+  const bearerToken = req.headers["authorization"];
+  if (!bearerToken) {
     return res.status(403).send("A token is required for authentication");
   }
 
   try {
+    const token = bearerToken.split(' ')[1]
     const decoded = jwt.verify(token, config.TOKEN_KEY);
-    req.user = decoded;
+    req.user = decoded
+    console.log(req.user)
 
+    // req.user = decoded;
     User.findOne({
       _id: req.user.user_id,
       verified: true
@@ -24,6 +26,9 @@ const isAuthenticated = (req, res, next) => {
             message: "No user found!",
           });
           return;
+        } else {
+          console.log(user)
+          return next()
         }
       })
       .catch((err) => {
@@ -31,7 +36,7 @@ const isAuthenticated = (req, res, next) => {
       });
 
   } catch (err) {
-    return res.status(401).send("Invalid Token");
+    return res.status(401).send(err);
   }
   return next();
 };
