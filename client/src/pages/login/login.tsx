@@ -13,61 +13,44 @@ import { useNavigate } from 'react-router';
 import { saveJWT } from '../../store/actionCreators';
 import { ICachedJWT } from '../../interface/authTypes';
 
-const ErrorUi: React.FC<any> = (errors: any): ReactElement => {
-  console.log('Error For UI', errors);
-  if (errors.errors.length > 0) {
-    return (
-      <>
-        {errors.errors.map((error: any) => {
-          return (
-            <div key={error.index}>
-              Please fix {error.param} - {error.msg}
-            </div>
-          );
-        })}
-      </>
-    );
-  } else return <></>;
-};
+import { useSelector } from 'react-redux';
+
+import { AuthError } from '../../components/AuthError';
 
 export default function LoginUI(props: any) {
   const navigate = useNavigate();
+
   //states for username and password
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [JwtStatus, setJwtStatus] = useState('');
-  const [errors, setErrors] = useState([]);
-
-  useEffect(() => {
-    setJwtStatus(AuthService.checkCachedJwtStatus());
-  }, []);
+  const [error, setError] = useState({});
 
   //functions to handle login form
   async function handleLogin(e: any) {
     //send username and password to login method
-    e.preventDefault();
     try {
       let response: any = await login(email, password);
-      console.log('response', response.data.token);
-      if (response.data.token) {
+      console.log('response', response);
+      if (response.data.data.token) {
         console.log('successfully logged in!');
-        const JWT: ICachedJWT =
-          AuthService.returnAccessTokenAsCachedJwt(response);
+        const JWT: ICachedJWT = AuthService.returnAccessTokenAsCachedJwt(
+          response.data
+        );
         saveJWT(JWT);
+        setError({});
         navigate('/profile');
       }
     } catch (error: any) {
-      console.log(error);
-      if (error?.response?.data?.errors) {
-        console.log(error.response.data.errors);
-        setErrors(error.response.data.errors);
+      if (error?.response?.data?.error) {
+        let errorData = error.response.data.error;
+        setError(errorData);
       } else {
-        error = [{ msg: error.message }];
-        setErrors(error);
+        setError(error);
       }
       return null;
     }
   }
+
   return (
     <Box
       sx={{
@@ -114,8 +97,7 @@ export default function LoginUI(props: any) {
           Login
         </Button>
       </Box>
-      <Typography>JWT Status - {JwtStatus}</Typography>
-      {errors.length > 0 ? <ErrorUi errors={errors} /> : ''}
+      {error ? <AuthError error={error} /> : ''}
     </Box>
   );
 }

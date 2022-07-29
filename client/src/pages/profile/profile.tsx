@@ -1,14 +1,6 @@
 import { Box, Button, Typography, Divider } from '@mui/material';
-import { useNavigate } from 'react-router';
-import AuthService from '../../services/AuthService';
-import { removeCachedJWT } from '../../store/actionCreators';
 
 export default function Profile(props: any) {
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    removeCachedJWT();
-    navigate('/login');
-  };
   return (
     <Box
       sx={{
@@ -27,13 +19,19 @@ export default function Profile(props: any) {
           marginBottom: '2rem',
         }}
       />
-      <Button
-        onClick={(e) => {
-          handleLogout();
-        }}
+
+      <Typography
+        sx={{ textAlign: 'left' }}
+        variant="h6"
+        component="h1"
+        gutterBottom
       >
-        Logout
-      </Button>
+        Your current balance is 0 Birr!
+      </Typography>
+      <Box>
+        <Button>Register Expense</Button>
+        <Button>Register Income</Button>
+      </Box>
     </Box>
   );
 }

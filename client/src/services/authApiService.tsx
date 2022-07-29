@@ -22,8 +22,12 @@ export async function login(username: string, password: string) {
     email: username,
   };
 
+  let config = {
+    headers: {},
+  };
+
   return await axios
-    .post(LOGIN_URL, bodyData)
+    .post(LOGIN_URL, bodyData, config)
     .then((response: AxiosResponse<any, any>) => {
       return response;
     });
