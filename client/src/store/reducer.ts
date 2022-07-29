@@ -14,14 +14,14 @@ export const JWTReducer = (
 ): IState => {
     switch (action.type) {
         case actionTypes.SAVE_JWT:
-            console.log('saving jwt..')
+            console.log('Saving jwt..')
             let JwtToSave: any = action.JWT
             AuthService.saveCachedJwt(JwtToSave)
-            const savedJWT: ICachedJWT | ICachedJWTEmpty = {}
+            const savedJWT: ICachedJWT | ICachedJWTEmpty = JwtToSave
             return { loggedIn: true, savedJWT: savedJWT }
 
         case actionTypes.CHECK_LOGGED_IN:
-            console.log('checking...')
+            console.log('Checking session state...')
             const status = AuthService.checkCachedJwtStatus()
             const cachedJWT = AuthService.getCachedJwt()
             console.log('JWT Status', status)

@@ -1,34 +1,36 @@
 import './home.sass';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import LoginUI from './login/login';
 
 import Layout from '../layout/layout';
 
 import Profile from './profile/profile';
 import Register from './register/register';
-import { store } from '../store/store';
 import { checkCachedJwtStatus } from '../store/actionCreators';
-import { IState } from '../interface/authTypes';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function Home() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  checkCachedJwtStatus();
-  let JWTData: IState = store.getState();
+  const navigate = useNavigate();
+  let store: any = useSelector((state) => state);
+
+  useEffect(() => {
+    checkCachedJwtStatus();
+    if (store.loggedIn) {
+      navigate('/profile');
+    }
+  }, []);
 
   return (
-    <Layout loggedIn={loggedIn}>
+    <Layout>
       {
-        //Routes here
+        //Routes
       }
       <Routes>
         <Route path="/">
           <Route path="/login" element={<LoginUI />}></Route>
           <Route path="/register" element={<Register />}></Route>
-          <Route
-            path="/profile"
-            element={!JWTData.loggedIn ? <LoginUI /> : <Profile />}
-          ></Route>
+          <Route path="/profile" element={<Profile />}></Route>
           <Route
             path="*"
             element={

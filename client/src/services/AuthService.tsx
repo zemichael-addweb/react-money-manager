@@ -55,7 +55,6 @@ export class AuthService implements iAuthService {
   checkCachedJwtStatus = () => {
     let cachedJwt = this.getCachedJwt();
     console.log('cachedJwt', cachedJwt);
-    console.log('true?', Object.keys(cachedJwt).length === 0);
     if (Object.keys(cachedJwt).length != 0) {
       if (cachedJwt.refreshAt > new Date().toISOString()) {
         return 'OKAY';

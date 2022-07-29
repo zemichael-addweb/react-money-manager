@@ -3,25 +3,8 @@ import { Box, Button, TextField, Typography, Divider } from '@mui/material';
 import AuthService from '../../services/AuthService';
 import { register } from '../../services/authApiService';
 import { useNavigate } from 'react-router';
-import { Dispatch } from 'redux';
-import { useDispatch } from 'react-redux';
 
-const ErrorUi: React.FC<any> = (errors: any): ReactElement => {
-  console.log('Error For UI', errors);
-  if (errors.errors.length > 0) {
-    return (
-      <>
-        {errors.errors.map((error: any) => {
-          return (
-            <div key={error.index}>
-              Please fix {error.param} - {error.msg}
-            </div>
-          );
-        })}
-      </>
-    );
-  } else return <></>;
-};
+import { AuthError } from '../../components/AuthError';
 
 export default function Register(props: any) {
   const navigate = useNavigate();
@@ -30,12 +13,7 @@ export default function Register(props: any) {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
-  const [JwtStatus, setJwtStatus] = useState('');
-  const [errors, setErrors] = useState([]);
-
-  useEffect(() => {
-    setJwtStatus(AuthService.checkCachedJwtStatus());
-  }, []);
+  const [error, setError] = useState({});
 
   //functions to handle login form
   async function handleRegister(e: any) {
@@ -50,12 +28,12 @@ export default function Register(props: any) {
       }
     } catch (error: any) {
       console.log(error);
-      if (error?.response?.data?.errors) {
-        console.log(error.response.data.errors);
-        setErrors(error.response.data.errors);
+      if (error?.response?.data?.error) {
+        console.log(error.response.data.error);
+        setError(error.response.data.error);
       } else {
         error = [{ msg: error.message }];
-        setErrors(error);
+        setError(error);
       }
       return null;
     }
@@ -121,8 +99,7 @@ export default function Register(props: any) {
           Register
         </Button>
       </Box>
-      <Typography>JWT Status - {JwtStatus}</Typography>
-      {errors.length > 0 ? <ErrorUi errors={errors} /> : ''}
+      {error ? <AuthError error={error} /> : ''}
     </Box>
   );
 }
