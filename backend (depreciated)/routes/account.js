@@ -8,5 +8,6 @@ app.use(rateLimiter);
 
 // Register
 app.post("/createAccount", isAuthenticated, accountController.createAccount);
+app.get("/fetchAllAccountsByUserId", isAuthenticated, accountController.fetchAllAccountsByUserId);
 
 module.exports = app;
