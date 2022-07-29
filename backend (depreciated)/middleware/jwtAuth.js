@@ -13,7 +13,7 @@ const isAuthenticated = (req, res, next) => {
     const token = bearerToken.split(' ')[1]
     const decoded = jwt.verify(token, config.TOKEN_KEY);
     req.user = decoded
-    console.log(req.user)
+    console.log(req.user, 'request user')
 
     // req.user = decoded;
     User.findOne({
@@ -26,9 +26,6 @@ const isAuthenticated = (req, res, next) => {
             message: "No user found!",
           });
           return;
-        } else {
-          console.log(user)
-          return next()
         }
       })
       .catch((err) => {
