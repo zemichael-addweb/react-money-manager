@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import './authError.sass';
 
 export const AuthError: React.FC<any> = (error: any): ReactElement => {

@@ -1,5 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import { AccountController } from "src/controllers/AccountController";
+import { isAuthorized } from "src/middlewares/authorizationMiddleware";
 import { Service } from "src/services";
 
 const service: Service = new Service;
@@ -10,9 +11,9 @@ const getAllAccounts = controller.getAllAccounts;
 const router: Router = express.Router();
 
 // POST /account/create
-router.post('/create', createAccount);
+router.post('/create', isAuthorized, createAccount);
 
 // GET /account
-router.get('/', getAllAccounts);
+router.get('/', isAuthorized, getAllAccounts);
 
 export default router;

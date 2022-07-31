@@ -7,19 +7,24 @@ import Layout from '../layout/layout';
 import Profile from './profile/profile';
 import Register from './register/register';
 import { checkCachedJwtStatus } from '../store/actionCreators';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 export default function Home() {
   const navigate = useNavigate();
-  let store: any = useSelector((state) => state);
+  const store: any = useSelector((state) => state);
 
   useEffect(() => {
     checkCachedJwtStatus();
+  }, []);
+
+  useEffect(() => {
     if (store.loggedIn) {
       navigate('/profile');
-    }
-  }, []);
+    } else navigate('/login');
+  }, [store]);
+
+  console.log('Home Rendered!');
 
   return (
     <Layout>

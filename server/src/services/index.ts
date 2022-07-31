@@ -2,9 +2,12 @@ import { AuthRepository } from 'src/repositories/AuthRepository';
 import { AccountRepository } from 'src/repositories/AccountRepository';
 import { ExpenseRepository } from 'src/repositories/ExpenseRepository';
 import { IncomeRepository } from 'src/repositories/IncomeRepository';
+import { CategoryRepository } from 'src/repositories/CategoryRepository';
 import { logger } from '../classes/consoleLoggerClass';
 import { IAccount } from 'src/interfaces/account';
 import { IExpense } from 'src/interfaces/expense';
+import { ICategory } from 'src/interfaces/category';
+import { IIncome } from 'src/interfaces/income';
 
 export class Service {
 
@@ -13,6 +16,7 @@ export class Service {
     private AccountRepository = new AccountRepository();
     private ExpenseRepository = new ExpenseRepository();
     private IncomeRepository = new IncomeRepository();
+    private CategoryRepository = new CategoryRepository();
 
     public async loginUser(email: string, password: string) {
         try {
@@ -93,7 +97,7 @@ export class Service {
     }
 
     //Income ///
-    public async registerIncome(newIncome: IExpense) {
+    public async registerIncome(newIncome: IIncome) {
         try {
             const registeredExpense = this.IncomeRepository.registerIncome(newIncome)
             if (registeredExpense) return registeredExpense
@@ -113,6 +117,47 @@ export class Service {
         try {
             const deletedIncome = this.IncomeRepository.deleteIncome(id)
             if (deletedIncome) return deletedIncome
+        } catch (error) {
+            logger.errorData('error data:', error);
+        }
+    }
+    public async updateIncome(id: string, update: IIncome) {
+        try {
+            const deletedIncome = this.IncomeRepository.updateIncome(id, update)
+            if (deletedIncome) return deletedIncome
+        } catch (error) {
+            logger.errorData('error data:', error);
+        }
+    }
+    //Category ///
+    public async createCategory(newIncome: ICategory) {
+        try {
+            const registeredExpense = this.CategoryRepository.registerCategory(newIncome)
+            if (registeredExpense) return registeredExpense
+        } catch (error) {
+            logger.errorData('error data:', error);
+        }
+    }
+    public async getAllCategory() {
+        try {
+            const registeredExpense = this.CategoryRepository.fetchAllCategory()
+            if (registeredExpense) return registeredExpense
+        } catch (error) {
+            logger.errorData('error data:', error);
+        }
+    }
+    public async deleteCategory(id: string) {
+        try {
+            const deletedIncome = this.CategoryRepository.deleteCategory(id)
+            if (deletedIncome) return deletedIncome
+        } catch (error) {
+            logger.errorData('error data:', error);
+        }
+    }
+    public async editCategory(id: string, update: ICategory) {
+        try {
+            const updatedCategory = this.CategoryRepository.editCategory(id, update)
+            if (updatedCategory) return updatedCategory
         } catch (error) {
             logger.errorData('error data:', error);
         }

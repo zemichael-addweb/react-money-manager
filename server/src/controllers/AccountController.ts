@@ -22,6 +22,7 @@ export class AccountController {
                     bank: req.body.bank,
                     number: req.body.account_number,
                     name: req.body.account_name,
+                    description: req.body.account_description,
                 };
                 const result = createAccountSchema.validate(validationBody);
                 logger.logData('validation result', result);
@@ -39,6 +40,7 @@ export class AccountController {
                     let bank = result.value.bank;
                     let number = result.value.number;
                     let name = result.value.name
+                    let description = result.value.description
                     //find existing user for validation
 
                     //check passwords match validation
@@ -46,10 +48,11 @@ export class AccountController {
                     if (!existingAccount) {
                         const newAccount: IAccount = {
                             userId: new ObjectId(userId),
-                            balance: balance,
+                            accountBalance: balance,
                             accountName: name,
                             bank: bank,
                             accountNumber: number,
+                            accountDescription: description,
                             created: new Date().toISOString()
                         }
                         let registeredAccount = await this._service.createAccount(newAccount);
@@ -98,11 +101,12 @@ export class AccountController {
 
     //get all accounts
     public getAllAccounts: any = async (req: Request, res: Response): Promise<void> => {
-        requestInterceptor(req.body);
+        // requestInterceptor(req.params);
+        console.log(req.query, 'Request query params');
         try {
-            if (req.body || req.params) {
+            if (req.body || req.query) {
                 let validationBody = {
-                    userId: req.body.user_id,
+                    userId: req.query.user_id,
                 };
                 const result = getAllAccountsSchema.validate(validationBody);
                 logger.logData('validation result', result);

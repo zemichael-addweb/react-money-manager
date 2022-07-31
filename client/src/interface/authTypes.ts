@@ -8,7 +8,7 @@ export interface ICachedJWT {
 }
 export interface IState {
     loggedIn: boolean;
-    savedJWT?: ICachedJWT | Object;
+    userInfo?: ICachedJWT | Object;
 }
 export interface ICachedJWTEmpty { }
 
@@ -16,5 +16,7 @@ export type JWTAction = {
     type: string
     JWT?: ICachedJWT
 }
-
+export interface IAuthError {
+    error: Object
+}
 export type DispatchType = (args: JWTAction) => JWTAction

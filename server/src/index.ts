@@ -10,6 +10,7 @@ import auth from './routes/auth/auth';
 import account from './routes/account/account';
 import expense from './routes/expense/expense';
 import income from './routes/income/income';
+import category from './routes/category/category';
 
 import { createConn } from './config/database';
 
@@ -29,6 +30,7 @@ app.use('/api/auth', auth);
 app.use('/api/account', account);
 app.use('/api/expense', expense);
 app.use('/api/income', income);
+app.use('/api/category', category);
 
 app.get('/', (req: Request, res: Response) => {
     res.send({
