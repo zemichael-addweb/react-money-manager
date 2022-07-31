@@ -7,6 +7,7 @@ const controller: IncomeController = new IncomeController(service);
 const registerIncome = controller.registerIncome;
 const getAllIncome = controller.getAllIncome;
 const deleteIncome = controller.deleteIncome;
+const editIncome = controller.editIncome;
 
 const router: Router = express.Router();
 
@@ -14,9 +15,12 @@ const router: Router = express.Router();
 router.get('/', getAllIncome);
 
 // POST /income/register
-router.post('/register', registerIncome);
+router.post('/', registerIncome);
 
 // POST /income/delete
-router.delete('/delete', deleteIncome);
+router.delete('/', deleteIncome);
+
+// POST /income/delete
+router.patch('/', editIncome);
 
 export default router;

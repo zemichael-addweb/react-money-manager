@@ -22,7 +22,7 @@ export default function Register(props: any) {
     try {
       let response: any = await register(name, email, password, repeatPassword);
       console.log('response', response);
-      if (response.data._id) {
+      if (response.data.data._id) {
         console.log('successfully Registered!');
         navigate('/login');
       }
@@ -99,7 +99,7 @@ export default function Register(props: any) {
           Register
         </Button>
       </Box>
-      {error ? <AuthError error={error} /> : ''}
+      {Object.keys(error).length > 0 ? <AuthError error={error} /> : ''}
     </Box>
   );
 }

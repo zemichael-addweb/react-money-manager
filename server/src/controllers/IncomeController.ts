@@ -5,7 +5,7 @@ import { logger } from '../classes/consoleLoggerClass';
 import { ErrorCode } from '../shared/error-codes';
 import { Service } from 'src/services';
 import { Request, Response } from 'express';
-import { deleteIncomeSchema, fetchAllIncomeSchema, registerIncomeSchema } from '@routes/income/schema';
+import { deleteIncomeSchema, editIncomeSchema, fetchAllIncomeSchema, registerIncomeSchema } from '@routes/income/schema';
 import { IIncome } from 'src/interfaces/income';
 
 export class IncomeController {
@@ -19,6 +19,7 @@ export class IncomeController {
                 let validationBody = {
                     userId: req.body.user_id,
                     accountId: req.body.account_id,
+                    categoryId: req.body.category_id,
                     amount: req.body.amount,
                     reason: req.body.reason,
                 };
@@ -35,6 +36,7 @@ export class IncomeController {
                     }
                     let userId = result.value.userId;
                     let accountId = result.value.accountId;
+                    let categoryId = result.value.categoryId;
                     let amount = result.value.amount;
                     let reason = result.value.reason;
                     let created = new Date().toISOString();
@@ -45,6 +47,7 @@ export class IncomeController {
                     const newIncome: IIncome = {
                         userId: new ObjectId(userId),
                         accountId: new ObjectId(accountId),
+                        categoryId: new ObjectId(categoryId),
                         amount: amount,
                         reason: reason,
                         created: created,
@@ -177,6 +180,78 @@ export class IncomeController {
                         return ResponseBuilder.badRequest(
                             ErrorCode.Invalid,
                             'request params is required and must be not empty',
+                            res
+                        );
+                    }
+                } else {
+                    logger.infoData('error happened');
+                    return ResponseBuilder.badRequest(
+                        ErrorCode.Invalid,
+                        result.error.details[0].message,
+                        res
+                    );
+                }
+            } else {
+                logger.errorData('body parameters not found');
+                return ResponseBuilder.badRequest(
+                    ErrorCode.Invalid,
+                    'body parameters not found',
+                    res
+                );
+            }
+        } catch (error) {
+            logger.errorData(error);
+            return ResponseBuilder.internalServerError(error, res);
+        }
+    };
+
+    //Edit Income
+    public editIncome: any = async (req: Request, res: Response): Promise<void> => {
+        requestInterceptor(req.body);
+        try {
+            if (req.body || req.params) {
+                let validationBody = {
+                    id: req.body.id,
+                    categoryId: req.body.category_id,
+                    amount: req.body.amount,
+                    reason: req.body.reason,
+                };
+                const result = editIncomeSchema.validate(validationBody);
+                logger.logData('validation result', result);
+                if (!result.error) {
+                    logger.infoData(result.value);
+                    if (Object.keys(result.value).length === 0) {
+                        return ResponseBuilder.badRequest(
+                            ErrorCode.Invalid,
+                            'request body is required and must be not empty',
+                            res
+                        );
+                    }
+                    let id = result.value.id;
+                    let categoryId = result.value.categoryId;
+                    let amount = result.value.amount;
+                    let reason = result.value.reason;
+
+                    //check userId and accountId...
+                    //
+
+                    const update: IIncome = {
+                        id: new ObjectId(id),
+                        categoryId: new ObjectId(categoryId),
+                        amount: amount,
+                        reason: reason,
+                    }
+                    let updatedIncome = await this._service.updateIncome(id, update);
+                    logger.infoData(updatedIncome, 'updatedIncome');
+                    if (updatedIncome) {
+                        return ResponseBuilder.ok(
+                            { message: "Successfully updated", data: updatedIncome },
+                            res
+                        );
+                    } else {
+                        return ResponseBuilder.configurationError(
+                            ErrorCode.GeneralError,
+                            'Error updating income!',
                             res
                         );
                     }

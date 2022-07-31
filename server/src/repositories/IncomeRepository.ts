@@ -36,4 +36,20 @@ export class IncomeRepository {
             }
         }
     }
+
+    public async updateIncome(id: string, update: IIncome): Promise<any> {
+        logger.infoData("Fetching Incomes...");
+        let result = await db.collection('Income').updateOne(
+            { '_id': new ObjectId(id) },
+            { $set: { reason: update.reason, amount: update.amount } },
+            {
+                returnOriginal: false,
+                upsert: true,
+            }
+        )
+        logger.infoData('Successfully Updated!')
+        logger.infoData(result, 'Updated Category')
+        if (result) return update
+
+    }
 }

@@ -1,9 +1,11 @@
 import { ObjectId } from "bson"
 
 export interface IIncome {
-    userId: ObjectId,
-    accountId: ObjectId,
+    id?: ObjectId,
+    userId?: ObjectId,
+    accountId?: ObjectId,
+    categoryId: ObjectId,
     amount: number,
     reason?: string,
-    created: string
+    created?: string
 }

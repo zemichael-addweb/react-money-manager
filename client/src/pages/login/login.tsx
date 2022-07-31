@@ -12,12 +12,11 @@ import { login } from '../../services/authApiService';
 import { useNavigate } from 'react-router';
 import { saveJWT } from '../../store/actionCreators';
 import { ICachedJWT } from '../../interface/authTypes';
-
-import { useSelector } from 'react-redux';
-
 import { AuthError } from '../../components/AuthError';
 
 export default function LoginUI(props: any) {
+  console.log('Login rendered!');
+
   const navigate = useNavigate();
 
   //states for username and password
@@ -25,9 +24,7 @@ export default function LoginUI(props: any) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState({});
 
-  //functions to handle login form
   async function handleLogin(e: any) {
-    //send username and password to login method
     try {
       let response: any = await login(email, password);
       console.log('response', response);
@@ -97,7 +94,7 @@ export default function LoginUI(props: any) {
           Login
         </Button>
       </Box>
-      {error ? <AuthError error={error} /> : ''}
+      {Object.keys(error).length > 0 ? <AuthError error={error} /> : ''}
     </Box>
   );
 }

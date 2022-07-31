@@ -6,10 +6,21 @@ import { iAuthService } from '../interface/authService';
 import { ICachedJWT } from '../interface/authTypes';
 
 export class AuthService implements iAuthService {
+  returnAuthHeader() {
+    const token = this.getCachedJwtToken();
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    };
+    return headers;
+  }
+
   //store Token
   returnAccessTokenAsCachedJwt(response: any) {
     if (response.data.token) {
-      console.log('saving access token..');
+      console.log('Saving access token..');
       this.destroyCachedJwt();
       const expiresAt = new Date(
         jwtDecode<JwtPayload>(response.data.token).exp! * 1000
@@ -53,12 +64,11 @@ export class AuthService implements iAuthService {
 
   //check the status of the token
   checkCachedJwtStatus = () => {
-    let cachedJwt = this.getCachedJwt();
-    console.log('cachedJwt', cachedJwt);
-    if (Object.keys(cachedJwt).length != 0) {
-      if (cachedJwt.refreshAt > new Date().toISOString()) {
+    let userInfoCache = this.getCachedJwt();
+    if (userInfoCache && Object.keys(userInfoCache).length != 0) {
+      if (userInfoCache.refreshAt > new Date().toISOString()) {
         return 'OKAY';
-      } else if (cachedJwt.expiresAt <= new Date().toISOString()) {
+      } else if (userInfoCache.expiresAt <= new Date().toISOString()) {
         return 'EXPIRED';
       } else {
         return 'NEED_REFRESH';
@@ -71,7 +81,8 @@ export class AuthService implements iAuthService {
   }
 
   getCachedJwt() {
-    return JSON.parse(sessionStorage.getItem('cachedJwt') || '{}');
+    let userInfoCache: any = sessionStorage.getItem('userInfoCache');
+    return JSON.parse(userInfoCache);
   }
 
   getCachedJwtToken() {
@@ -79,11 +90,11 @@ export class AuthService implements iAuthService {
   }
 
   saveCachedJwt(jwt: ICachedJWT) {
-    sessionStorage.setItem('cachedJwt', JSON.stringify(jwt));
+    sessionStorage.setItem('userInfoCache', JSON.stringify(jwt));
   }
 
   destroyCachedJwt() {
-    sessionStorage.removeItem('cachedJwt');
+    sessionStorage.removeItem('userInfoCache');
   }
 
   handleLogOut() {
