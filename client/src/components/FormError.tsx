@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from 'react';
 import './authError.sass';
 
-export const AuthError: React.FC<any> = (error: any): ReactElement => {
+export const FormError: React.FC<any> = (error: any): ReactElement => {
   console.log('Error For UI', error);
   if (Object.keys(error.error).length != 0) {
     return (

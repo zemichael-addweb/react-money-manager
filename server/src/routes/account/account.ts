@@ -11,7 +11,7 @@ const getAllAccounts = controller.getAllAccounts;
 const router: Router = express.Router();
 
 // POST /account/create
-router.post('/create', isAuthorized, createAccount);
+router.post('/', isAuthorized, createAccount);
 
 // GET /account
 router.get('/', isAuthorized, getAllAccounts);

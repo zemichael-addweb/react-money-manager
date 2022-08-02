@@ -26,7 +26,14 @@ export default function AccountCard({
   created,
 }: IAccount) {
   return (
-    <Card sx={{ maxWidth: 400, minHeight: '100%' }}>
+    <Card
+      sx={{
+        display: 'inline-block',
+        maxWidth: 400,
+        minHeight: '100%',
+        margin: '.5rem',
+      }}
+    >
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Last Transaction : Income [0 ETB]

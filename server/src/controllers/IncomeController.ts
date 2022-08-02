@@ -215,6 +215,7 @@ export class IncomeController {
                     categoryId: req.body.category_id,
                     amount: req.body.amount,
                     reason: req.body.reason,
+                    description: req.body.description,
                 };
                 const result = editIncomeSchema.validate(validationBody);
                 logger.logData('validation result', result);
@@ -231,6 +232,7 @@ export class IncomeController {
                     let categoryId = result.value.categoryId;
                     let amount = result.value.amount;
                     let reason = result.value.reason;
+                    let description = result.value.description;
 
                     //check userId and accountId...
                     //
@@ -240,6 +242,7 @@ export class IncomeController {
                         categoryId: new ObjectId(categoryId),
                         amount: amount,
                         reason: reason,
+                        description: description,
                     }
                     let updatedIncome = await this._service.updateIncome(id, update);
                     logger.infoData(updatedIncome, 'updatedIncome');

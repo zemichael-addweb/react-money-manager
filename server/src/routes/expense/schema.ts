@@ -11,6 +11,11 @@ export const registerExpenseSchema = Joi.object({
             message: 'account_id is required and must be a valid ObjectId as a string!'
         };
     }),
+    categoryId: Joi.string().hex().length(24).required().error(() => {
+        return {
+            message: 'category_id is required and must be a valid ObjectId as a string!'
+        };
+    }),
     amount: Joi.number().required().error(() => {
         return {
             message: 'amount is required and must be a valid number!'
@@ -19,6 +24,11 @@ export const registerExpenseSchema = Joi.object({
     reason: Joi.string().error(() => {
         return {
             message: 'reason must be a valid string!'
+        };
+    }),
+    description: Joi.string().error(() => {
+        return {
+            message: 'description must be a valid string!'
         };
     }),
 });
