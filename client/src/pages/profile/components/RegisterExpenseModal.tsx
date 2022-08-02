@@ -7,6 +7,7 @@ import Modal from '@mui/material/Modal';
 import { MakeRequest } from '../../../services/apiService';
 
 import { FormError } from '../../../components/FormError';
+import CategoryLookup from '../../../components/lookups/categoryLookup';
 
 type props = {
   open: boolean;
@@ -20,29 +21,28 @@ type TNewAccount = {
   bank: string;
 };
 
-export default function RegisterAccountModal({ open, setOpen }: props) {
+export default function RegisterExpenseModal({ open, setOpen }: props) {
   console.log('register account modal rendered');
-  const [error, setError] = useState('');
-  const [name, setName] = useState('');
-  const [balance, setBalance] = useState(0);
-  const [number, setNumber] = useState('');
-  const [bank, setBank] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [reason, setReason] = useState('');
+  const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState('');
+  const [error, setError] = useState({});
 
   // const handleOpen = () => setModalOpen(true);
   const handleClose = () => setOpen(false);
   const handleRegister = async (): Promise<void> => {
-    const newAccount = {
+    const newExpense = {
       user_id: '62e4e6c22f17311b521afa71',
-      account_balance: balance,
-      bank: bank,
-      account_number: number,
-      account_name: name,
-      account_description: description,
+      account_id: '62e4e6c22f17311b521afa71',
+      category_id: categoryId,
+      reason: reason,
+      amount: amount,
+      description: description,
     };
-    console.log(newAccount);
+    console.log(newExpense);
     try {
-      const registered = await MakeRequest('account', 'post', newAccount, true);
+      const registered = await MakeRequest('expense', 'post', newExpense, true);
       console.log(registered, 'registered');
       setOpen(false);
     } catch (error: any) {
@@ -83,7 +83,7 @@ export default function RegisterAccountModal({ open, setOpen }: props) {
             alignItems: 'center',
           }}
         >
-          <Typography variant="h5">Register New Account</Typography>
+          <Typography variant="h5">Register New Expense</Typography>
           <Divider
             sx={{
               width: '80%',
@@ -94,7 +94,7 @@ export default function RegisterAccountModal({ open, setOpen }: props) {
           />
           <TextField
             sx={{ marginBottom: '1rem' }}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setReason(e.target.value)}
             required
             id="account_name"
             label="Account Name"
@@ -102,36 +102,27 @@ export default function RegisterAccountModal({ open, setOpen }: props) {
           <TextField
             sx={{ marginBottom: '1rem' }}
             onChange={(e) => {
-              let accountBalance: number = Number(e.target.value);
-              return setBalance(accountBalance);
+              let amount: number = Number(e.target.value);
+              return setAmount(amount);
             }}
             required
             id="account_balance"
             label="Initial Balance"
             type="number"
           />
+          <CategoryLookup
+            set={setCategoryId}
+            url="category"
+            label="Category"
+            labelFromLookup="category"
+          />
           <TextField
             sx={{ marginBottom: '1rem' }}
             onChange={(e) => {
-              let description: string = e.target.value;
-              return setDescription(description);
+              setDescription(e.target.value);
             }}
             id="account_Description"
             label="Description"
-          />
-          <TextField
-            sx={{ marginBottom: '1rem' }}
-            onChange={(e) => setNumber(e.target.value)}
-            id="account_number"
-            label="Account Number"
-            required
-          />
-          <TextField
-            sx={{ marginBottom: '1rem' }}
-            onChange={(e) => setBank(e.target.value)}
-            id="bank"
-            label="Bank"
-            required
           />
           {Object.keys(error).length > 0 ? <FormError error={error} /> : ''}
         </Box>

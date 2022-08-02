@@ -26,6 +26,11 @@ export const registerIncomeSchema = Joi.object({
             message: 'reason must be a valid string!'
         };
     }),
+    description: Joi.string().error(() => {
+        return {
+            message: 'description must be a valid string!'
+        };
+    }),
 });
 export const editIncomeSchema = Joi.object({
     id: Joi.string().hex().length(24).required().error(() => {
@@ -46,6 +51,11 @@ export const editIncomeSchema = Joi.object({
     reason: Joi.string().error(() => {
         return {
             message: 'reason must be a valid string!'
+        };
+    }),
+    description: Joi.string().error(() => {
+        return {
+            message: 'description must be a valid string!'
         };
     }),
 });

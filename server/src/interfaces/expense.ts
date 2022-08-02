@@ -6,5 +6,6 @@ export interface IExpense {
     categoryId: ObjectId,
     amount: number,
     reason?: string,
+    description?: string,
     created: string
 }

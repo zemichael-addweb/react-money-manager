@@ -22,6 +22,7 @@ export class ExpenseController {
                     categoryId: req.body.category_id,
                     amount: req.body.amount,
                     reason: req.body.reason,
+                    description: req.body.description,
                 };
                 const result = registerExpenseSchema.validate(validationBody);
                 logger.logData('validation result', result);
@@ -39,6 +40,7 @@ export class ExpenseController {
                     let categoryId = result.value.categoryId;
                     let amount = result.value.amount;
                     let reason = result.value.reason;
+                    let description = result.value.description;
                     let created = new Date().toISOString();
 
                     //check userId and accountId...
@@ -50,6 +52,7 @@ export class ExpenseController {
                         categoryId: new ObjectId(categoryId),
                         amount: amount,
                         reason: reason,
+                        description: description,
                         created: created,
                     }
                     let registeredExpense = await this._service.registerExpense(newExpense);

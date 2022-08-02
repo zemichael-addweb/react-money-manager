@@ -21,9 +21,14 @@ export const createAccountSchema = Joi.object({
             message: 'bank must be a valid string!'
         };
     }),
-    number: Joi.number().error(() => {
+    number: Joi.string().error(() => {
         return {
             message: 'account_number and must be a valid number!'
+        };
+    }),
+    description: Joi.string().error(() => {
+        return {
+            message: 'account_description and must be a valid number!'
         };
     }),
 });

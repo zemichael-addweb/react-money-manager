@@ -12,28 +12,44 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 import RegisterAccountModal from './account/RegisterAccountModal';
 
+import { useContext } from 'react';
+import { UserDetailsContext } from '../../services/context/UserDetailsContext';
+import { useNavigate } from 'react-router';
+import RegisterExpenseModal from './components/RegisterExpenseModal';
+
 export default function Profile(props: any) {
   console.log('Profile rendered!');
-  const [registerForm, setRegisterForm] = useState('');
+  const navigate = useNavigate();
+  const { userDetails } = useContext(UserDetailsContext);
   const [accounts, setAccounts] = useState([]);
+  console.log('userDetails', userDetails);
+
+  //register modal
   const [registerAccountModalOpen, setRegisterAccountModalOpen] =
     useState(false);
+  //register modal
+  const [registerExpenseModalOpen, setRegisterExpenseModalOpen] =
+    useState(false);
+  const fetchAccount = () => {
+    if (accounts.length > 0) {
+    } else {
+      if (Object.keys(userDetails).length > 0) {
+        const userId = userDetails.userId;
+        console.log(`Fetching accounts for userId [${userId}]`);
+        const headers = AuthService.returnAuthHeader();
+        const account = async (userId: string) => {
+          const response: any = await axios.get(
+            `http://localhost:4001/api/account?user_id=${userId}`,
+            { headers: headers }
+          );
+          if (response.data.data.length > 0) setAccounts(response.data.data);
+        };
+        account(userId).catch(console.error);
+      } else navigate('/login');
+    }
+  };
 
-  const store: any = useSelector((state) => state);
-
-  useEffect(() => {
-    const userId = store.userInfo.userId;
-    console.log(userId, 'UserID');
-    const headers = AuthService.returnAuthHeader();
-    const account = async (userId: string) => {
-      const response: any = await axios.get(
-        `http://localhost:4001/api/account?user_id=${userId}`,
-        { headers: headers }
-      );
-      if (response.data.data.length > 0) setAccounts(response.data.data);
-    };
-    account(userId).catch(console.error);
-  }, [store]);
+  useEffect(() => fetchAccount, [registerAccountModalOpen]);
 
   console.log(accounts, 'Accounts');
 
@@ -46,19 +62,11 @@ export default function Profile(props: any) {
         alignItems: 'center',
       }}
     >
-      <Typography
-        sx={{ textAlign: 'left' }}
-        variant="h6"
-        component="h1"
-        gutterBottom
-      >
-        Your current balance is 0 Birr!
-      </Typography>
       <Box sx={{ display: 'flex', marginBottom: '1rem' }}>
         <Button
           variant="outlined"
           startIcon={<RemoveCircleOutlineIcon />}
-          onClick={() => setRegisterForm('expense')}
+          onClick={() => setRegisterExpenseModalOpen(true)}
           color="error"
         >
           Register Expense
@@ -66,7 +74,7 @@ export default function Profile(props: any) {
         <Button
           variant="outlined"
           startIcon={<AddCircleOutlineIcon />}
-          onClick={() => setRegisterForm('income')}
+          // onClick={() => setRegisterForm('income')}
           color="success"
         >
           Register Income
@@ -93,40 +101,38 @@ export default function Profile(props: any) {
           </Button>
         </Box>
 
-        <Grid
-          justifyContent="center"
-          container
-          spacing={2}
+        <Box
           sx={{
             margin: 0,
-            width: '100%',
-            gridAutoFlow: 'column',
-            gridTemplateColumns:
-              'repeat(auto-fit, minmax(160px,1fr)) !important',
-            gridAutoColumns: 'minmax(160px, 1fr)',
+            maxWidth: '100VW',
+            overflow: 'auto',
+            whiteSpace: 'nowrap',
           }}
         >
           {accounts.map((account: IAccount, index: number) => {
             return (
-              <Grid key={index} item xs>
-                <AccountCard
-                  _id={account._id}
-                  userId={account.userId}
-                  accountName={account.accountName}
-                  accountNumber={account.accountNumber}
-                  accountBalance={account.accountBalance}
-                  bank={account.bank}
-                  created={account.created}
-                />
-              </Grid>
+              <AccountCard
+                key={index}
+                _id={account._id}
+                userId={account.userId}
+                accountName={account.accountName}
+                accountNumber={account.accountNumber}
+                accountBalance={account.accountBalance}
+                bank={account.bank}
+                created={account.created}
+              />
             );
           })}
-        </Grid>
+        </Box>
       </Box>
 
       <RegisterAccountModal
         open={registerAccountModalOpen}
         setOpen={setRegisterAccountModalOpen}
+      />
+      <RegisterExpenseModal
+        open={registerExpenseModalOpen}
+        setOpen={setRegisterExpenseModalOpen}
       />
     </Box>
   );

@@ -4,7 +4,7 @@ import AuthService from '../../services/AuthService';
 import { register } from '../../services/authApiService';
 import { useNavigate } from 'react-router';
 
-import { AuthError } from '../../components/AuthError';
+import { FormError } from '../../components/FormError';
 
 export default function Register(props: any) {
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ export default function Register(props: any) {
           Register
         </Button>
       </Box>
-      {Object.keys(error).length > 0 ? <AuthError error={error} /> : ''}
+      {Object.keys(error).length > 0 ? <FormError error={error} /> : ''}
     </Box>
   );
 }

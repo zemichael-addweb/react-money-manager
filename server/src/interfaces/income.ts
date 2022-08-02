@@ -7,5 +7,6 @@ export interface IIncome {
     categoryId: ObjectId,
     amount: number,
     reason?: string,
+    description?: string,
     created?: string
 }

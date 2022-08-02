@@ -12,7 +12,7 @@ import { login } from '../../services/authApiService';
 import { useNavigate } from 'react-router';
 import { saveJWT } from '../../store/actionCreators';
 import { ICachedJWT } from '../../interface/authTypes';
-import { AuthError } from '../../components/AuthError';
+import { FormError } from '../../components/FormError';
 
 export default function LoginUI(props: any) {
   console.log('Login rendered!');
@@ -35,7 +35,7 @@ export default function LoginUI(props: any) {
         );
         saveJWT(JWT);
         setError({});
-        navigate('/profile');
+        navigate('/');
       }
     } catch (error: any) {
       if (error?.response?.data?.error) {
@@ -94,7 +94,7 @@ export default function LoginUI(props: any) {
           Login
         </Button>
       </Box>
-      {Object.keys(error).length > 0 ? <AuthError error={error} /> : ''}
+      {Object.keys(error).length > 0 ? <FormError error={error} /> : ''}
     </Box>
   );
 }

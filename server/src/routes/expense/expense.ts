@@ -11,12 +11,12 @@ const deleteIncome = controller.deleteExpense;
 const router: Router = express.Router();
 
 // POST /expense/register
-router.post('/register', registerExpense);
+router.post('/', registerExpense);
 
 // GET /expense
 router.get('/', getAllExpense);
 
 // DELETE /expense/register
-router.delete('/delete', deleteIncome);
+router.delete('/', deleteIncome);
 
 export default router;
