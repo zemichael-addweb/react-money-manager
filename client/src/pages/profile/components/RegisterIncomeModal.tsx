@@ -14,6 +14,13 @@ type props = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+type TNewAccount = {
+  name: string;
+  balance: number;
+  number: string;
+  bank: string;
+};
+
 export default function RegisterExpenseModal({ open, setOpen }: props) {
   console.log('register account modal rendered');
   const [categoryId, setCategoryId] = useState('');
@@ -89,8 +96,8 @@ export default function RegisterExpenseModal({ open, setOpen }: props) {
             sx={{ marginBottom: '1rem' }}
             onChange={(e) => setReason(e.target.value)}
             required
-            id="expense_reason"
-            label="Expense Reason"
+            id="account_name"
+            label="Account Name"
           />
           <TextField
             sx={{ marginBottom: '1rem' }}
@@ -99,15 +106,15 @@ export default function RegisterExpenseModal({ open, setOpen }: props) {
               return setAmount(amount);
             }}
             required
-            id="expense_amount"
-            label="Amount"
+            id="account_balance"
+            label="Initial Balance"
             type="number"
           />
           <CategoryLookup
             set={setCategoryId}
-            url="expense_category"
+            url="category"
             label="Category"
-            filter="expense"
+            filter="income"
             labelFromLookup="category"
           />
           <TextField

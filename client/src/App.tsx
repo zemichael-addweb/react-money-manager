@@ -1,16 +1,8 @@
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  useNavigate,
-} from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.sass';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
-
-import ThemeContext from './services/context/ThemeContext';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ColorPicker from './components/ColorPicker';
 import Layout from './layout/layout';
 import Home from './pages/home/home';
@@ -20,6 +12,9 @@ import { checkCachedJwtStatus } from './store/actionCreators';
 
 import UserDetailContextProvider from './services/context/UserDetailsContext';
 import Profile from './pages/profile/profile';
+import ThemeContextProvider, {
+  ThemeContext,
+} from './services/context/ThemeContext';
 
 function RedirectToHome() {
   return <Navigate to="/home" replace={true} />;
@@ -30,20 +25,9 @@ export default function App() {
     checkCachedJwtStatus();
   }, []);
 
-  const [themeBackgroundColor, setThemeBackgroundColor] =
-    useState('rgb(0, 0, 0)');
-  const [displayThemeSelector, setDisplayThemeSelector] = useState('none');
-
   return (
-    <ThemeContext.Provider
-      value={{
-        themeBackgroundColor,
-        setThemeBackgroundColor,
-        displayThemeSelector,
-        setDisplayThemeSelector,
-      }}
-    >
-      <ColorPicker selector={displayThemeSelector} />
+    <ThemeContextProvider>
+      <ColorPicker />
       <Provider store={store}>
         <Layout>
           {
@@ -75,6 +59,6 @@ export default function App() {
           </Routes>
         </Layout>
       </Provider>
-    </ThemeContext.Provider>
+    </ThemeContextProvider>
   );
 }

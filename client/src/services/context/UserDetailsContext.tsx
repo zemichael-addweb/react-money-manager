@@ -13,17 +13,11 @@ type TContext = {};
 export const UserDetailsContext: any = createContext({});
 
 function UserDetailContextProvider(props: any) {
-  const [userDetails, setUserDetails] = useState({});
   const fetchedUserDetails: ICachedJWT | {} = useFetchUserDetail();
-
-  useEffect(() => {
-    setUserDetails(fetchedUserDetails);
-  }, []);
-
   return (
     <UserDetailsContext.Provider
       value={{
-        userDetails: userDetails,
+        userDetails: fetchedUserDetails,
       }}
     >
       {props.children}

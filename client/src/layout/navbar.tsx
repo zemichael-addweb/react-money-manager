@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Button, Container, Typography, IconButton, Box } from '@mui/material';
+import { Button, Container, Typography, Box } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import LoginIcon from '@mui/icons-material/Login';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
-import LoginContext from '../services/context/ThemeContext';
+import { ThemeContext } from '../services/context/ThemeContext';
 
 //Componenets
 import { removeCachedJWT } from '../store/actionCreators';
@@ -30,8 +30,7 @@ export default function NavBar() {
     setFullName(store.userInfo.fullName ? `${store.userInfo.fullName}` : '');
   }, [store]);
 
-  const { themeBackgroundColor, setThemeBackgroundColor } =
-    useContext(LoginContext);
+  const { themeBackgroundColor }: any = useContext(ThemeContext);
 
   return (
     <Box

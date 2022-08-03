@@ -10,8 +10,6 @@ import { Link } from 'react-router-dom';
 export default function Home() {
   const { userDetails } = useContext(UserDetailsContext);
 
-  const [accountBalance, setAccountBalance] = useState(0);
-
   const navigate = useNavigate();
   console.log('Home Rendered!');
   if (Object.keys(userDetails).length === 0) {

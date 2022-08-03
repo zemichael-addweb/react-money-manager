@@ -11,16 +11,18 @@ import { FormError } from '../../../components/FormError';
 type props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  userId: string;
 };
 
 type TNewAccount = {
+  user_id: string;
   name: string;
   balance: number;
   number: string;
   bank: string;
 };
 
-export default function RegisterAccountModal({ open, setOpen }: props) {
+export default function RegisterAccountModal({ open, setOpen, userId }: props) {
   console.log('register account modal rendered');
   const [error, setError] = useState('');
   const [name, setName] = useState('');
@@ -33,7 +35,7 @@ export default function RegisterAccountModal({ open, setOpen }: props) {
   const handleClose = () => setOpen(false);
   const handleRegister = async (): Promise<void> => {
     const newAccount = {
-      user_id: '62e4e6c22f17311b521afa71',
+      user_id: userId,
       account_balance: balance,
       bank: bank,
       account_number: number,

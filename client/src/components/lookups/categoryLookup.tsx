@@ -1,42 +1,39 @@
 import { Autocomplete, TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { MakeRequest } from '../../services/apiService';
 
 type IProp = {
   set: React.Dispatch<React.SetStateAction<string>>;
   url: string;
   label: string;
+  filter: String;
   labelFromLookup: string;
-};
-
-type IRequest = {
-  url: string;
-  method: string;
-  data: Object;
-  needAuthorization: boolean;
 };
 
 export default function CategoryLookup({
   set,
   url,
   label,
+  filter,
   labelFromLookup,
 }: IProp) {
+  const [visibleValue, setVisibleValue] = React.useState<string | null>('');
+  const [inputValue, setInputValue] = React.useState('');
   const [formattedCategory, setFormattedCategory] = useState([]);
 
-  const [value, setValue] = React.useState<string | null>('');
-  const [inputValue, setInputValue] = React.useState('');
-
-  const handleFetchCategory = async (): Promise<void> => {
-    let formatted;
+  useMemo(async () => {
     try {
       const category = await MakeRequest(url, 'get', null, true);
       console.log('category', category);
-
       if (category) {
-        formatted = category.map((category: any) => {
-          return { label: category[labelFromLookup], id: category._id };
-        });
+        const formatted: any = category
+          .filter((category: any) => {
+            return category.category === filter;
+          })
+          .map((category: any) => {
+            return { label: category[labelFromLookup], id: category._id };
+          });
+        return setFormattedCategory(formatted);
       }
     } catch (error: any) {
       if (error?.response?.data?.error) {
@@ -45,30 +42,37 @@ export default function CategoryLookup({
         return;
       }
     }
-    console.log('setFormattedCategory', formatted);
-    setFormattedCategory(formatted);
-    console.log('formattedCategory', formattedCategory);
-  };
-
-  useEffect(() => {
-    handleFetchCategory();
   }, []);
 
   return (
     <Autocomplete
-      value={value}
-      onChange={(event: any, newValue: string | null) => {
-        setValue(newValue);
+      value={visibleValue}
+      onChange={(event: any, newValue: any) => {
+        console.log(`selected ${newValue.id}`);
+        setVisibleValue(newValue);
+        set(newValue.id);
       }}
       inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
+      onInputChange={(event, newInputValue: any) => {
         setInputValue(newInputValue);
       }}
       disablePortal
-      id="combo-box-demo"
+      id="category"
       options={formattedCategory}
       sx={{ width: '100% ', marginBottom: '1rem' }}
-      renderInput={(params) => <TextField {...params} label={label} />}
+      renderInput={(params) => (
+        <>
+          <div style={{ display: 'none' }}>
+            <div>{`value: ${
+              visibleValue !== null
+                ? `'${JSON.stringify(visibleValue)}'`
+                : 'null'
+            }`}</div>
+            <div>{`inputValue: '${inputValue}'`}</div>
+          </div>
+          <TextField {...params} label={label} />
+        </>
+      )}
     />
   );
 }
