@@ -1,12 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  TextField,
-  Typography,
-  Divider,
-} from '@mui/material';
+import { Box, Button, TextField, Typography, Divider } from '@mui/material';
 import AuthService from '../../services/AuthService';
 import { login } from '../../services/authApiService';
 import { useNavigate } from 'react-router';

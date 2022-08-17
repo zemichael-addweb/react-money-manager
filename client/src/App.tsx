@@ -15,6 +15,7 @@ import Profile from './pages/profile/profile';
 import ThemeContextProvider, {
   ThemeContext,
 } from './services/context/ThemeContext';
+import NavBar from './layout/navbar';
 
 function RedirectToHome() {
   return <Navigate to="/home" replace={true} />;
@@ -29,35 +30,34 @@ export default function App() {
     <ThemeContextProvider>
       <ColorPicker />
       <Provider store={store}>
-        <Layout>
-          {
-            //Routes
-          }
-          <Routes>
-            <Route path="/" element={<RedirectToHome />}></Route>
-            <Route
-              path="/*"
-              element={
-                <UserDetailContextProvider>
+        <Routes>
+          <Route path="/" element={<RedirectToHome />}></Route>
+          <Route path="/login" element={<LoginUI />}></Route>
+          <Route path="/register" element={<Register />}></Route>
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: '1rem' }}>
+                <p>There's nothing here!</p>
+              </main>
+            }
+          />
+        </Routes>
+        <UserDetailContextProvider>
+          <Layout>
+            <Routes>
+              <Route
+                path="/*"
+                element={
                   <Routes>
                     <Route path="/home" element={<Home />}></Route>
                     <Route path="/profile" element={<Profile />}></Route>
                   </Routes>
-                </UserDetailContextProvider>
-              }
-            ></Route>
-            <Route path="/login" element={<LoginUI />}></Route>
-            <Route path="/register" element={<Register />}></Route>
-            <Route
-              path="*"
-              element={
-                <main style={{ padding: '1rem' }}>
-                  <p>There's nothing here!</p>
-                </main>
-              }
-            />
-          </Routes>
-        </Layout>
+                }
+              ></Route>
+            </Routes>
+          </Layout>
+        </UserDetailContextProvider>
       </Provider>
     </ThemeContextProvider>
   );

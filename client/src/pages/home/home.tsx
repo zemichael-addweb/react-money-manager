@@ -9,14 +9,16 @@ import { Link } from 'react-router-dom';
 
 export default function Home() {
   const { userDetails } = useContext(UserDetailsContext);
-
   const navigate = useNavigate();
-  console.log('Home Rendered!');
-  if (Object.keys(userDetails).length === 0) {
-    console.log('no user detail');
-    navigate('/login');
-  }
-  console.log('userDetail', userDetails);
+
+  useEffect(() => {
+    console.log('Home Rendered!');
+    if (Object.keys(userDetails).length === 0) {
+      console.log('no user detail');
+      navigate('/login');
+    }
+    console.log('userDetail', userDetails);
+  }, []);
 
   return (
     <Box>

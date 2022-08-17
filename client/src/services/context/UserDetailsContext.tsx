@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { ICachedJWT } from '../../interface/authTypes';
+import NavBar from '../../layout/navbar';
 import useFetchUserDetail from '../userDetailHooks';
 
 type TContext = {};

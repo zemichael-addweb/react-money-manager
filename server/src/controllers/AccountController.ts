@@ -44,7 +44,7 @@ export class AccountController {
                     //find existing user for validation
 
                     //check passwords match validation
-                    let existingAccount = await this._service.findExistingAccountByNumberOrName(name, number);
+                    let existingAccount = await this._service.findExistingAccountByNumberOrName(userId, name, number);
                     if (!existingAccount) {
                         const newAccount: IAccount = {
                             userId: new ObjectId(userId),

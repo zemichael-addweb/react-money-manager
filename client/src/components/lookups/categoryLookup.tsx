@@ -1,6 +1,7 @@
 import { Autocomplete, TextField } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import { MakeRequest } from '../../services/apiService';
+import { useBeforeRender } from '../../services/utils';
 
 type IProp = {
   set: React.Dispatch<React.SetStateAction<string>>;
@@ -17,22 +18,27 @@ export default function CategoryLookup({
   filter,
   labelFromLookup,
 }: IProp) {
-  const [visibleValue, setVisibleValue] = React.useState<string | null>('');
+  console.log('Category rendered');
+  const [visibleValue, setVisibleValue] = React.useState<any | null>({
+    label: 'Please Select or search',
+  });
   const [inputValue, setInputValue] = React.useState('');
   const [formattedCategory, setFormattedCategory] = useState([]);
 
-  useMemo(async () => {
+  useBeforeRender(async () => {
+    console.log('before render');
     try {
       const category = await MakeRequest(url, 'get', null, true);
       console.log('category', category);
       if (category) {
         const formatted: any = category
           .filter((category: any) => {
-            return category.category === filter;
+            return category.categoryFor === filter;
           })
           .map((category: any) => {
             return { label: category[labelFromLookup], id: category._id };
           });
+        console.log('formatted', formatted);
         return setFormattedCategory(formatted);
       }
     } catch (error: any) {
@@ -43,6 +49,12 @@ export default function CategoryLookup({
       }
     }
   }, []);
+
+  useEffect(() => {
+    console.log('After Render');
+  }, []);
+
+  console.log('formattedCategory', formattedCategory);
 
   return (
     <Autocomplete
@@ -62,7 +74,7 @@ export default function CategoryLookup({
       sx={{ width: '100% ', marginBottom: '1rem' }}
       renderInput={(params) => (
         <>
-          <div style={{ display: 'none' }}>
+          <div style={{ display: '' }}>
             <div>{`value: ${
               visibleValue !== null
                 ? `'${JSON.stringify(visibleValue)}'`

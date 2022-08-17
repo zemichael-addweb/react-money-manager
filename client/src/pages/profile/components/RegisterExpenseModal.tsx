@@ -105,7 +105,7 @@ export default function RegisterExpenseModal({ open, setOpen }: props) {
           />
           <CategoryLookup
             set={setCategoryId}
-            url="expense_category"
+            url="category"
             label="Category"
             filter="expense"
             labelFromLookup="category"

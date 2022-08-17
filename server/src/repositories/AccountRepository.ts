@@ -14,9 +14,9 @@ export class AccountRepository {
         if (result.ops[0]) return result.ops[0]
     }
 
-    public async findExistingAccountByNumberOrName(name: string, number: number): Promise<any> {
-        logger.infoData(`Finding existing user by number [${number ? number : ''}] or name [${name ? name : ''}]...`);
-        let existingAccount = await db.collection('Account').findOne({ $or: [{ 'accountName': name }, { 'accountNumber': number }] });
+    public async findExistingAccountByNumberOrName(userId: string, name: string, number: number): Promise<any> {
+        logger.infoData(`Finding existing user [${userId}] by number [${number ? number : ''}] or name [${name ? name : ''}]...`);
+        let existingAccount = await db.collection('Account').findOne({ userId: new ObjectId(userId), $or: [{ 'accountName': name }, { 'accountNumber': number }] });
         console.log(existingAccount)
         if (existingAccount) return existingAccount
     }
