@@ -1,10 +1,10 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Box, Button, TextField, Typography, Divider } from '@mui/material';
-import AuthService from '../../services/AuthService';
-import { register } from '../../services/authApiService';
+import AuthService from '../../../services/AuthService';
+import { register } from '../../../services/authApiService';
 import { useNavigate } from 'react-router';
 
-import { FormError } from '../../components/FormError';
+import { FormError } from '../../../components/FormError';
 
 export default function Register(props: any) {
   const navigate = useNavigate();
@@ -27,7 +27,6 @@ export default function Register(props: any) {
         navigate('/login');
       }
     } catch (error: any) {
-      
       console.log(error);
       if (error?.response?.data?.error) {
         console.log(error.response.data.error);

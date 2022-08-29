@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState, Context } from 'react';
 import { checkCachedJwtStatus } from '../../store/actionCreators';
+//! get account theme options and display based on that
 
 type TContext = {};
 // type MyProps = { children: any };
@@ -17,8 +18,7 @@ export default function ThemeContextProvider(props: any) {
     checkCachedJwtStatus();
   }, []);
 
-  const [themeBackgroundColor, setThemeBackgroundColor] =
-    useState('rgb(0, 0, 0)');
+  const [themeBackgroundColor, setThemeBackgroundColor] = useState('#d3d3d3');
   const [displayThemeSelector, setDisplayThemeSelector] = useState('none');
 
   return (
