@@ -12,38 +12,21 @@ import Profile from './profile/profile';
 
 export default function Index() {
   const { userDetails } = useContext(UserDetailsContext);
-  if (userDetails && userDetails.accessToken) {
-    return (
-      <UserDetailContextProvider>
-        <Layout>
-          <Routes>
-            <Route
-              path="/*"
-              element={
-                <Routes>
-                  <Route path="/home" element={<Home />}></Route>
-                  <Route path="/profile" element={<Profile />}></Route>
-                </Routes>
-              }
-            ></Route>
-          </Routes>
-        </Layout>
-      </UserDetailContextProvider>
-    );
-  } else
-    return (
+  return (
+    <UserDetailContextProvider>
       <Routes>
-        <Route path="/" element={<RedirectTo route="home" />}></Route>
-        <Route path="/login" element={<LoginUI />}></Route>
-        <Route path="/register" element={<Register />}></Route>
         <Route
-          path="*"
+          path="app/*"
           element={
-            <main style={{ padding: '1rem' }}>
-              <p>There's nothing here!</p>
-            </main>
+            <Layout>
+              <Routes>
+                <Route path="home" element={<Home />}></Route>
+                <Route path="profile" element={<Profile />}></Route>
+              </Routes>
+            </Layout>
           }
-        />
+        ></Route>
       </Routes>
-    );
+    </UserDetailContextProvider>
+  );
 }

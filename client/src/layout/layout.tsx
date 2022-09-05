@@ -6,7 +6,7 @@ import { Sidebar } from './sidebar';
 export default function Layout(props: any) {
   return (
     <>
-      <NavBar />
+      {/* <NavBar /> */}
       <Sidebar />
       {/* <Typography variant="h5">{props.title}</Typography>
       <Divider
@@ -18,7 +18,7 @@ export default function Layout(props: any) {
         }}
       /> */}
       {props.children}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

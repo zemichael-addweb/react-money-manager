@@ -35,7 +35,7 @@ export default function Accounts() {
           `account?user_id=${userId}`,
           'get',
           null,
-          true
+          true 
         );
         console.log(response, 'res');
         if (response.length > 0) setAccounts(response);
