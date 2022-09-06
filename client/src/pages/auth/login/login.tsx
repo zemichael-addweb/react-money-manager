@@ -1,18 +1,11 @@
 import { ReactElement, useEffect, useState } from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  TextField,
-  Typography,
-  Divider,
-} from '@mui/material';
-import AuthService from '../../services/AuthService';
-import { login } from '../../services/authApiService';
+import { Box, Button, TextField, Typography, Divider } from '@mui/material';
+import AuthService from '../../../services/AuthService';
+import { login } from '../../../services/authApiService';
 import { useNavigate } from 'react-router';
-import { saveJWT } from '../../store/actionCreators';
-import { ICachedJWT } from '../../interface/authTypes';
-import { FormError } from '../../components/FormError';
+import { saveJWT } from '../../../store/actionCreators';
+import { ICachedJWT } from '../../../interface/authTypes';
+import { FormError } from '../../../components/FormError';
 
 export default function LoginUI(props: any) {
   console.log('Login rendered!');

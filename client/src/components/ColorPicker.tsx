@@ -1,11 +1,11 @@
 import { useState, useContext } from 'react';
-import ThemeContext from '../services/context/ThemeContext';
+import { ThemeContext, TThemeContext } from '../services/context/ThemeContext';
 
 interface IProps {
   selector: string;
 }
 
-export default function ColorPicker({ selector }: IProps) {
+export default function ColorPicker() {
   const [red, setRed] = useState(0);
   const [green, setGreen] = useState(0);
   const [blue, setBlue] = useState(0);
@@ -25,14 +25,17 @@ export default function ColorPicker({ selector }: IProps) {
 
   console.log(`${red}-${green}-${blue}`);
 
-  const { themeBackgroundColor, setThemeBackgroundColor } =
-    useContext(ThemeContext);
+  const {
+    displayThemeSelector,
+    themeBackgroundColor,
+    setThemeBackgroundColor,
+  }: any = useContext(ThemeContext);
 
   setThemeBackgroundColor(`rgb(${red} ${green} ${blue})`);
   return (
     <div
       style={{
-        display: selector,
+        display: displayThemeSelector,
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',

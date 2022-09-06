@@ -1,41 +1,36 @@
-import React, { createContext, useReducer, useEffect, Component } from 'react';
+import React, { createContext, useEffect, useState, Context } from 'react';
+import { checkCachedJwtStatus } from '../../store/actionCreators';
+//! get account theme options and display based on that
 
 type TContext = {};
 // type MyProps = { children: any };
-// type MyState = {
-//   themeBackgroundColor: string;
-//   setThemeBackgroundColor: Function;
-//   displayThemeSelector: string;
-//   setDisplayThemeSelector: Function;
-// };
+export type TThemeContext = Context<{
+  themeBackgroundColor?: string;
+  setThemeBackgroundColor?: React.Dispatch<React.SetStateAction<string>>;
+  displayThemeSelector?: string;
+  setDisplayThemeSelector?: React.Dispatch<React.SetStateAction<string>>;
+}>;
 
-export const ThemeContext: any = createContext({});
+export const ThemeContext = createContext({});
 
-// class ThemeContextProvider extends Component<any, any> {
-//   state: any = {
-//     themeBackgroundColor: 'rgb(0, 0, 0)',
-//     setThemeBackgroundColor: (state: string) =>
-//       this.setState((prevState: MyState) => {
-//         prevState.themeBackgroundColor = state;
-//       }),
-//     displayThemeSelector: 'none',
-//     setDisplayThemeSelector: (state: string) =>
-//       this.setState((prevState: MyState) => {
-//         prevState.displayThemeSelector = state;
-//       }),
-//   };
+export default function ThemeContextProvider(props: any) {
+  useEffect(() => {
+    checkCachedJwtStatus();
+  }, []);
 
-//   render() {
-//     return (
-//       <ThemeContext.Provider
-//         value={{
-//           ...this.state,
-//         }}
-//       >
-//         {this.props.children}
-//       </ThemeContext.Provider>
-//     );
-//   }
-// }
+  const [themeBackgroundColor, setThemeBackgroundColor] = useState('#d3d3d3');
+  const [displayThemeSelector, setDisplayThemeSelector] = useState('none');
 
-export default ThemeContext;
+  return (
+    <ThemeContext.Provider
+      value={{
+        themeBackgroundColor,
+        setThemeBackgroundColor,
+        displayThemeSelector,
+        setDisplayThemeSelector,
+      }}
+    >
+      {props.children}
+    </ThemeContext.Provider>
+  );
+}

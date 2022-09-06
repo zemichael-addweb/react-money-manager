@@ -1,6 +1,6 @@
 import { Box, Button, Container } from '@mui/material';
 import { useContext } from 'react';
-import LoginContext from '../services/context/ThemeContext';
+import { ThemeContext } from '../services/context/ThemeContext';
 
 export default function Footer() {
   const {
@@ -8,7 +8,7 @@ export default function Footer() {
     setThemeBackgroundColor,
     setDisplayThemeSelector,
     displayThemeSelector,
-  } = useContext(LoginContext);
+  }: any = useContext(ThemeContext);
   return (
     <Box
       sx={{

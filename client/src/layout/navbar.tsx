@@ -2,23 +2,32 @@ import './navbar.sass';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
-import { Button, Container, Typography, IconButton, Box } from '@mui/material';
+import {
+  Button,
+  Container,
+  Typography,
+  Box,
+  IconButton,
+  Avatar,
+} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import LoginIcon from '@mui/icons-material/Login';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
-import LoginContext from '../services/context/ThemeContext';
+import { ThemeContext } from '../services/context/ThemeContext';
+import { AccountDrawer } from './accountDrawer';
 
-//Componenets
+//Components
 import { removeCachedJWT } from '../store/actionCreators';
+import { Menu } from '@mui/icons-material';
+import { UserDetailsContext } from '../services/context/UserDetailsContext';
 
 export default function NavBar() {
-  const [fullName, setFullName] = useState('');
-  const store: any = useSelector((state) => state);
+  const { userDetails }: any = useContext(UserDetailsContext);
 
   console.log('NavBar Rendered!');
+  console.log('userDetails', userDetails);
 
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -26,12 +35,7 @@ export default function NavBar() {
     navigate('/login');
   };
 
-  useEffect(() => {
-    setFullName(store.userInfo.fullName ? `${store.userInfo.fullName}` : '');
-  }, [store]);
-
-  const { themeBackgroundColor, setThemeBackgroundColor } =
-    useContext(LoginContext);
+  const { themeBackgroundColor }: any = useContext(ThemeContext);
 
   return (
     <Box
@@ -39,10 +43,11 @@ export default function NavBar() {
         backgroundColor: themeBackgroundColor,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: 'calc(5px + 1vmin)',
         color: 'white',
+        position: 'fixed',
+        top: 0,
+        width: '100%',
+        zIndex: '999',
       }}
     >
       <Container sx={{ display: 'flex', margin: 'auto', my: 4 }}>
@@ -53,7 +58,7 @@ export default function NavBar() {
         >
           <RequestQuoteIcon fontSize="large" />
           <Typography
-            sx={{ marginLeft: '1rem', textAlign: 'left' }}
+            sx={{ marginLeft: '1rem' }}
             variant="h6"
             component="h1"
             gutterBottom
@@ -69,25 +74,36 @@ export default function NavBar() {
             flexDirection: 'column',
           }}
         >
-          {fullName ? (
+          {userDetails.fullName ? (
             <Box sx={{ margin: 'auto', display: 'flex' }}>
-              <Typography
-                sx={{ marginRight: '1rem' }}
-                variant="h6"
-                component="h1"
-              >
-                {fullName}
-              </Typography>
-              <Button
-                onClick={(e) => {
-                  handleLogout();
-                }}
-                sx={{ marginRight: '1rem' }}
-                variant="outlined"
-                startIcon={<LogoutIcon fontSize="inherit" />}
-              >
-                Logout
-              </Button>
+              <AccountDrawer
+                button={
+                  <Avatar sx={{ bgcolor: 'blue' }}>
+                    {userDetails.fullName[0]}
+                  </Avatar>
+                }
+                sliderItems={
+                  <>
+                    <Typography
+                      sx={{ marginRight: '1rem' }}
+                      variant="h6"
+                      component="h1"
+                    >
+                      {userDetails.fullName ? `${userDetails.fullName}` : ''}
+                    </Typography>
+                    <Button
+                      onClick={(e) => {
+                        handleLogout();
+                      }}
+                      sx={{ marginRight: '1rem' }}
+                      variant="outlined"
+                      startIcon={<LogoutIcon fontSize="inherit" />}
+                    >
+                      Logout
+                    </Button>
+                  </>
+                }
+              />
             </Box>
           ) : (
             <Box sx={{ margin: 'auto', display: 'flex' }}>
@@ -99,7 +115,7 @@ export default function NavBar() {
                 >
                   login
                 </Button>
-              </Link>{' '}
+              </Link>
               <Link to="/register">
                 <Button variant="outlined" startIcon={<HowToRegIcon />}>
                   Register

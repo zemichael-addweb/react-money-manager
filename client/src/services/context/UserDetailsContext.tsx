@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { ICachedJWT } from '../../interface/authTypes';
+import NavBar from '../../layout/navbar';
 import useFetchUserDetail from '../userDetailHooks';
 
 type TContext = {};
@@ -13,17 +14,11 @@ type TContext = {};
 export const UserDetailsContext: any = createContext({});
 
 function UserDetailContextProvider(props: any) {
-  const [userDetails, setUserDetails] = useState({});
   const fetchedUserDetails: ICachedJWT | {} = useFetchUserDetail();
-
-  useEffect(() => {
-    setUserDetails(fetchedUserDetails);
-  }, []);
-
   return (
     <UserDetailsContext.Provider
       value={{
-        userDetails: userDetails,
+        userDetails: fetchedUserDetails,
       }}
     >
       {props.children}

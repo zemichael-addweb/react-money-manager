@@ -52,9 +52,9 @@ export class Service {
             logger.errorData('error data:', error);
         }
     }
-    public async findExistingAccountByNumberOrName(name: string, number: number) {
+    public async findExistingAccountByNumberOrName(userId, name: string, number: number) {
         try {
-            const existingUser = this.AccountRepository.findExistingAccountByNumberOrName(name, number);
+            const existingUser = this.AccountRepository.findExistingAccountByNumberOrName(userId, name, number);
             if (existingUser) return existingUser
         } catch (error) {
             logger.errorData('error data:', error);
